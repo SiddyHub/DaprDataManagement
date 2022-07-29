@@ -10,28 +10,27 @@ namespace GloboTicket.Services.EventCatalog.Repositories
 {
     public class EventRepository: IEventRepository
     {
-        private readonly EventCatalogCosmosDbContext _eventCatalogDbContext;
+        private readonly EventCatalogCosmosDbContext _cosmosDbContext;
 
         public EventRepository(EventCatalogCosmosDbContext eventCatalogDbContext)
         {
-            _eventCatalogDbContext = eventCatalogDbContext;
+            _cosmosDbContext = eventCatalogDbContext;
         }
 
         public async Task<IEnumerable<Event>> GetEvents(Guid categoryId)
         {
-            return await _eventCatalogDbContext.Events
-                //.Include(x => x.Category)
+            return await _cosmosDbContext.Events                
                 .Where(x => (Guid.Parse(x.CategoryId) == categoryId || categoryId == Guid.Empty)).ToListAsync();
         }
 
         public async Task<Event> GetEventById(Guid eventId)
         {
-            return await _eventCatalogDbContext.Events.Where(x => x.EventId == eventId).FirstOrDefaultAsync();
+            return await _cosmosDbContext.Events.Where(x => x.EventId == eventId).FirstOrDefaultAsync();
         }
 
         public async Task<bool> SaveChanges()
         {
-            return (await _eventCatalogDbContext.SaveChangesAsync() > 0);
+            return (await _cosmosDbContext.SaveChangesAsync() > 0);
         }
     }
 }

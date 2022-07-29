@@ -16,10 +16,7 @@ namespace GloboTicket.Services.EventCatalog
             var host = CreateHostBuilder(args).Build();
 
             using (var scope = host.Services.CreateScope())
-            {
-                //var db = scope.ServiceProvider.GetRequiredService<EventCatalogDbContext>();
-                //db.Database.Migrate();
-
+            {                
                 var dbCosmos = scope.ServiceProvider.GetRequiredService<EventCatalogCosmosDbContext>();
 
                 //dbCosmos.Database.EnsureDeleted();

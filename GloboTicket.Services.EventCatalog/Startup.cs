@@ -23,9 +23,7 @@ namespace GloboTicket.Services.EventCatalog
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
-        {
-            var value = Configuration["CosmosDb:Endpoint"];            
-
+        {                    
             services.AddDbContext<EventCatalogCosmosDbContext>(options =>
                 options.UseCosmos(Configuration["CosmosDb:Endpoint"],
                 Configuration["CosmosDb:Key"],

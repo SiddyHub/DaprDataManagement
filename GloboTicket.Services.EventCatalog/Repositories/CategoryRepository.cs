@@ -9,22 +9,22 @@ namespace GloboTicket.Services.EventCatalog.Repositories
 {
     public class CategoryRepository: ICategoryRepository
     {
-        private readonly EventCatalogCosmosDbContext _eventCatalogDbContext;
+        private readonly EventCatalogCosmosDbContext _cosmosDbContext;
 
         public CategoryRepository(EventCatalogCosmosDbContext eventCatalogDbContext)
         {
-            _eventCatalogDbContext = eventCatalogDbContext;
+            _cosmosDbContext = eventCatalogDbContext;
         }
 
 
         public async Task<IEnumerable<Category>> GetAllCategories()
         {
-            return await _eventCatalogDbContext.Categories.ToListAsync();
+            return await _cosmosDbContext.Categories.ToListAsync();
         }
 
         public async Task<Category> GetCategoryById(string categoryId)
         {
-            return await _eventCatalogDbContext.Categories.Where(x => x.CategoryId.ToString() == categoryId).FirstOrDefaultAsync();
+            return await _cosmosDbContext.Categories.Where(x => x.CategoryId.ToString() == categoryId).FirstOrDefaultAsync();
         }
     }
 }
