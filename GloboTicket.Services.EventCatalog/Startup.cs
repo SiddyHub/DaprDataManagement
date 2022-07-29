@@ -24,8 +24,13 @@ namespace GloboTicket.Services.EventCatalog
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<EventCatalogDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            var value = Configuration["CosmosDb:Endpoint"];            
+
+            services.AddDbContext<EventCatalogCosmosDbContext>(options =>
+                options.UseCosmos(Configuration["CosmosDb:Endpoint"],
+                Configuration["CosmosDb:Key"],
+                Configuration["CosmosDb:DatabaseName"])
+            );
 
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IEventRepository, EventRepository>();

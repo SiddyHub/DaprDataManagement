@@ -1,47 +1,89 @@
-﻿using System;
-using GloboTicket.Services.EventCatalog.Entities;
+﻿using GloboTicket.Services.EventCatalog.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GloboTicket.Services.EventCatalog.DbContexts
 {
-    public class EventCatalogDbContext : DbContext
+    public class EventCatalogCosmosDbContext : DbContext
     {
-        public EventCatalogDbContext(DbContextOptions<EventCatalogDbContext> options) : base(options)
+        public EventCatalogCosmosDbContext(DbContextOptions<EventCatalogCosmosDbContext> options) : base(options)
         {
-
         }
-        public DbSet<Category> Categories { get; set; }
+
         public DbSet<Event> Events { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.HasDefaultContainer("Events");
+
+            modelBuilder.Entity<Event>()
+                .HasNoDiscriminator();
+
+            modelBuilder.Entity<Event>()
+                .HasPartitionKey(o => o.CategoryId);
+
+            modelBuilder.Entity<Category>()
+                .ToContainer("Categories");
 
             var concertGuid = Guid.Parse("{B0788D2F-8003-43C1-92A4-EDC76A7C5DDE}");
             var musicalGuid = Guid.Parse("{6313179F-7837-473A-A4D5-A5571B43E6A6}");
             var playGuid = Guid.Parse("{BF3F3002-7E53-441E-8B76-F6280BE284AA}");
             var conferenceGuid = Guid.Parse("{FE98F549-E790-4E9F-AA16-18C2292A2EE9}");
 
-            modelBuilder.Entity<Category>().HasData(new Category
+            var CategoryConcert = new Category
             {
                 CategoryId = concertGuid,
                 Name = "Concerts"
-            });
-            modelBuilder.Entity<Category>().HasData(new Category
+            };
+            modelBuilder.Entity<Category>().HasData(CategoryConcert);
+
+            var CategoryMusicals = new Category
             {
                 CategoryId = musicalGuid,
                 Name = "Musicals"
-            });
-            modelBuilder.Entity<Category>().HasData(new Category
+            };
+            modelBuilder.Entity<Category>().HasData(CategoryMusicals);
+
+            var CategoryPlays = new Category
             {
                 CategoryId = playGuid,
                 Name = "Plays"
-            });
-            modelBuilder.Entity<Category>().HasData(new Category
+            };
+            modelBuilder.Entity<Category>().HasData(CategoryPlays);
+
+            var CategoryConferences = new Category
             {
                 CategoryId = conferenceGuid,
                 Name = "Conferences"
-            });
+            };
+            modelBuilder.Entity<Category>().HasData(CategoryConferences);
+
+            var Venue1 = new Venue
+            {
+                Name = "Massey Hall",
+                City = "Toronto",
+                Country = "Canada"
+            };
+
+            var Venue2 = new Venue
+            {
+                Name = "L'Olympia",
+                City = "Montreal",
+                Country = "Canada"
+            };
+
+            var Venue3 = new Venue
+            {
+                Name = "Commodore Ballroom",
+                City = "Vancouver",
+                Country = "Canada"
+            };
+
+            DateTime eventDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 7, 0, 0);
 
             modelBuilder.Entity<Event>().HasData(new Event
             {
@@ -49,10 +91,15 @@ namespace GloboTicket.Services.EventCatalog.DbContexts
                 Name = "John Egbert Live",
                 Price = 65,
                 Artist = "John Egbert",
-                Date = DateTime.Now.AddMonths(6),
+                Date = eventDate.AddMonths(6),
                 Description = "Join John for his farwell tour across 15 continents. John really needs no introduction since he has already mesmerized the world with his banjo.",
                 ImageUrl = "https://gillcleerenpluralsight.blob.core.windows.net/files/GloboTicket/banjo.jpg",
-                CategoryId = concertGuid
+
+                CategoryId = CategoryConcert.CategoryId.ToString(),
+                CategoryName = CategoryConcert.Name,
+                VenueName = Venue1.Name,
+                VenueCity = Venue1.City,
+                VenueCountry = Venue1.Country
             });
 
             modelBuilder.Entity<Event>().HasData(new Event
@@ -61,10 +108,15 @@ namespace GloboTicket.Services.EventCatalog.DbContexts
                 Name = "The State of Affairs: Michael Live!",
                 Price = 85,
                 Artist = "Michael Johnson",
-                Date = DateTime.Now.AddMonths(9),
+                Date = eventDate.AddMonths(9),
                 Description = "Michael Johnson doesn't need an introduction. His 25 concert across the globe last year were seen by thousands. Can we add you to the list?",
                 ImageUrl = "https://gillcleerenpluralsight.blob.core.windows.net/files/GloboTicket/michael.jpg",
-                CategoryId = concertGuid
+
+                CategoryId = CategoryConcert.CategoryId.ToString(),
+                CategoryName = CategoryConcert.Name,
+                VenueName = Venue1.Name,
+                VenueCity = Venue1.City,
+                VenueCountry = Venue1.Country
             });
 
             modelBuilder.Entity<Event>().HasData(new Event
@@ -73,10 +125,14 @@ namespace GloboTicket.Services.EventCatalog.DbContexts
                 Name = "Clash of the DJs",
                 Price = 85,
                 Artist = "DJ 'The Mike'",
-                Date = DateTime.Now.AddMonths(4),
+                Date = eventDate.AddMonths(4),
                 Description = "DJs from all over the world will compete in this epic battle for eternal fame.",
                 ImageUrl = "https://gillcleerenpluralsight.blob.core.windows.net/files/GloboTicket/dj.jpg",
-                CategoryId = concertGuid
+                CategoryId = CategoryConcert.CategoryId.ToString(),
+                CategoryName = CategoryConcert.Name,
+                VenueName = Venue1.Name,
+                VenueCity = Venue1.City,
+                VenueCountry = Venue1.Country
             });
 
             modelBuilder.Entity<Event>().HasData(new Event
@@ -85,10 +141,14 @@ namespace GloboTicket.Services.EventCatalog.DbContexts
                 Name = "Spanish guitar hits with Manuel",
                 Price = 25,
                 Artist = "Manuel Santinonisi",
-                Date = DateTime.Now.AddMonths(4),
+                Date = eventDate.AddMonths(4),
                 Description = "Get on the hype of Spanish Guitar concerts with Manuel.",
                 ImageUrl = "https://gillcleerenpluralsight.blob.core.windows.net/files/GloboTicket/guitar.jpg",
-                CategoryId = concertGuid
+                CategoryId = CategoryConcert.CategoryId.ToString(),
+                CategoryName = CategoryConcert.Name,
+                VenueName = Venue1.Name,
+                VenueCity = Venue1.City,
+                VenueCountry = Venue1.Country
             });
 
             modelBuilder.Entity<Event>().HasData(new Event
@@ -97,10 +157,14 @@ namespace GloboTicket.Services.EventCatalog.DbContexts
                 Name = "Techorama 2021",
                 Price = 400,
                 Artist = "Many",
-                Date = DateTime.Now.AddMonths(10),
+                Date = eventDate.AddMonths(10),
                 Description = "The best tech conference in the world",
                 ImageUrl = "https://gillcleerenpluralsight.blob.core.windows.net/files/GloboTicket/conf.jpg",
-                CategoryId = conferenceGuid
+                CategoryId = CategoryConferences.CategoryId.ToString(),
+                CategoryName = CategoryConferences.Name,
+                VenueName = Venue1.Name,
+                VenueCity = Venue1.City,
+                VenueCountry = Venue1.Country
             });
 
             modelBuilder.Entity<Event>().HasData(new Event
@@ -109,10 +173,14 @@ namespace GloboTicket.Services.EventCatalog.DbContexts
                 Name = "To the Moon and Back",
                 Price = 135,
                 Artist = "Nick Sailor",
-                Date = DateTime.Now.AddMonths(8),
+                Date = eventDate.AddMonths(8),
                 Description = "The critics are over the moon and so will you after you've watched this sing and dance extravaganza written by Nick Sailor, the man from 'My dad and sister'.",
                 ImageUrl = "https://gillcleerenpluralsight.blob.core.windows.net/files/GloboTicket/musical.jpg",
-                CategoryId = musicalGuid
+                CategoryId = CategoryMusicals.CategoryId.ToString(),
+                CategoryName = CategoryMusicals.Name,
+                VenueName = Venue1.Name,
+                VenueCity = Venue1.City,
+                VenueCountry = Venue1.Country
             });
         }
     }

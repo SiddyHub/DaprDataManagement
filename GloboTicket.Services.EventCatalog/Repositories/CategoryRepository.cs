@@ -9,9 +9,9 @@ namespace GloboTicket.Services.EventCatalog.Repositories
 {
     public class CategoryRepository: ICategoryRepository
     {
-        private readonly EventCatalogDbContext _eventCatalogDbContext;
+        private readonly EventCatalogCosmosDbContext _eventCatalogDbContext;
 
-        public CategoryRepository(EventCatalogDbContext eventCatalogDbContext)
+        public CategoryRepository(EventCatalogCosmosDbContext eventCatalogDbContext)
         {
             _eventCatalogDbContext = eventCatalogDbContext;
         }

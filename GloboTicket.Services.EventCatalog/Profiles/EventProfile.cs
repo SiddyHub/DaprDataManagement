@@ -7,7 +7,7 @@ namespace GloboTicket.Services.EventCatalog.Profiles
         public EventProfile()
         {
             CreateMap<Entities.Event, Models.EventDto>()
-                .ForMember(dest => dest.CategoryName, opts => opts.MapFrom(src => src.Category.Name));
+                .ForMember(dest => dest.CategoryName, opts => opts.MapFrom(src => src.CategoryName));
         }
     }
 }
