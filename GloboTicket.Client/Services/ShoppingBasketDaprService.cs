@@ -31,19 +31,7 @@ namespace GloboTicket.Web.Services
         }
 
         public async Task<BasketLine> AddToBasket(Guid basketId, BasketLineForCreation basketLineForCreation)
-        {
-            //if (basketId == Guid.Empty)
-            //{
-            //    var basketForCreation = new BasketForCreation { UserId = settings.UserId };
-            //    var basketResponse = await daprClient.InvokeMethodAsync<BasketForCreation, Basket>("shoppingbasket", "/api/baskets", basketForCreation);                   
-            //    basketId = basketResponse.BasketId;
-            //}
-
-            //var request = daprClient.CreateInvokeMethodRequest(HttpMethod.Post, "shoppingbasket", $"/api/baskets/{basketId}/basketlines", basketLine);            
-
-            //var response = await daprClient.InvokeMethodAsync<BasketLine>(request);            
-            //return response;
-
+        {            
             logger.LogInformation($"ADD TO BASKET {basketId}");
             var basket = await GetBasketFromStateStore(basketId);
             var @event = await GetEventFromStateStore(basketLineForCreation.EventId);
@@ -67,9 +55,7 @@ namespace GloboTicket.Web.Services
         public async Task<Basket> GetBasket(Guid basketId)
         {
             if (basketId == Guid.Empty)
-                return null;
-            //var request = await daprClient.InvokeMethodAsync<Basket>(HttpMethod.Get, "shoppingbasket", $"/api/baskets/{basketId}");            
-            //return request;
+                return null;            
 
             logger.LogInformation($"GET BASKET {basketId}");
             var basket = await GetBasketFromStateStore(basketId);
@@ -79,19 +65,14 @@ namespace GloboTicket.Web.Services
         public async Task<IEnumerable<BasketLine>> GetLinesForBasket(Guid basketId)
         {
             if (basketId == Guid.Empty)
-                return new BasketLine[0];
-            //var response = await daprClient.InvokeMethodAsync<IEnumerable<BasketLine>>(HttpMethod.Get, "shoppingbasket", $"/api/baskets/{basketId}/basketLines");            
-            //return response;
+                return new BasketLine[0];            
 
             var basket = await GetBasketFromStateStore(basketId);
             return basket.Lines;
         }
 
         public async Task UpdateLine(Guid basketId, BasketLineForUpdate basketLineForUpdate)
-        {
-            //var request = daprClient.CreateInvokeMethodRequest(HttpMethod.Put, "shoppingbasket", $"/api/baskets/{basketId}/basketLines/{basketLineForUpdate.LineId}", basketLineForUpdate);
-            //await daprClient.InvokeMethodAsync<BasketLine>(request);            
-
+        {                       
             var basket = await GetBasketFromStateStore(basketId);
             var index = basket.Lines.FindIndex(bl => bl.BasketLineId == basketLineForUpdate.LineId);
             basket.Lines[index].TicketAmount = basketLineForUpdate.TicketAmount;
@@ -111,9 +92,7 @@ namespace GloboTicket.Web.Services
         }
 
         public async Task RemoveLine(Guid basketId, Guid lineId)
-        {
-            //await daprClient.InvokeMethodAsync(HttpMethod.Delete, "shoppingbasket", $"/api/baskets/{basketId}/basketLines/{lineId}");                      
-
+        {                               
             var basket = await GetBasketFromStateStore(basketId);
             var index = basket.Lines.FindIndex(bl => bl.BasketLineId == lineId);
             if (index >= 0)
@@ -181,10 +160,7 @@ namespace GloboTicket.Web.Services
         }
 
         public async Task Checkout(Guid basketId, BasketForCheckout basketForCheckout)
-        {
-            //var request = daprClient.CreateInvokeMethodRequest(HttpMethod.Post, "shoppingbasket", "/api/baskets/checkout", basketForCheckout);
-            //var response = await daprClient.InvokeMethodAsync<BasketForCheckout>(request);
-
+        {          
             var basket = await GetBasketFromStateStore(basketId);
 
             var basketCheckoutMessage = new BasketCheckoutMessage();
@@ -257,8 +233,7 @@ namespace GloboTicket.Web.Services
             {
                 basket.CouponId = couponForUpdate.CouponId;
             }
-            await SaveBasketToStateStore(basket);
-            //await daprClient.InvokeMethodAsync(HttpMethod.Put, "shoppingbasket", $"/api/baskets/{basketId}/coupon", couponForUpdate);
+            await SaveBasketToStateStore(basket);            
         }
     }
 }

@@ -9,10 +9,7 @@ namespace GloboTicket.Services.ShoppingBasket.DbContexts
         : base(options)
         {
         }
-
-        public DbSet<Basket> Baskets { get; set; }
-        public DbSet<BasketLine> BasketLines { get; set; }
-        public DbSet<Event> Events { get; set; }
+                    
         public DbSet<BasketChangeEvent> BasketChangeEvents { get; set; }
     }
 }

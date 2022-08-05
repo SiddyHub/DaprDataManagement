@@ -2,7 +2,6 @@ using AutoMapper;
 using Dapr.Client;
 using GloboTicket.Services.ShoppingBasket.DbContexts;
 using GloboTicket.Services.ShoppingBasket.Repositories;
-using GloboTicket.Services.ShoppingBasket.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -35,21 +34,8 @@ namespace GloboTicket.Services.ShoppingBasket
                     }));
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-            var optionsBuilder = new DbContextOptionsBuilder<ShoppingBasketDbContext>();
-            optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-
-            services.AddSingleton(new BasketLinesIntegrationRepository(optionsBuilder.Options));
-
-            services.AddScoped<IBasketRepository, BasketRepository>();
-            services.AddScoped<IBasketLinesRepository, BasketLinesRepository>();
-            services.AddScoped<IEventRepository, EventRepository>();
+            
             services.AddScoped<IBasketChangeEventRepository, BasketChangeEventRepository>();            
-
-            services.AddSingleton<IEventCatalogService>(c =>
-                new EventCatalogService(DaprClient.CreateInvokeHttpClient("catalog")));
-            services.AddSingleton<IDiscountService>(c =>
-                new DiscountService(DaprClient.CreateInvokeHttpClient("discountgrpc")));
 
             services.AddDbContext<ShoppingBasketDbContext>(options =>
             {
