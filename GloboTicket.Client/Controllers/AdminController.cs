@@ -1,4 +1,5 @@
-﻿using GloboTicket.Web.Models;
+﻿using GloboTicket.Web.Extensions;
+using GloboTicket.Web.Models;
 using GloboTicket.Web.Models.Api;
 using GloboTicket.Web.Models.View;
 using GloboTicket.Web.Services;
@@ -12,10 +13,14 @@ namespace GloboTicket.Web.Controllers
     public class AdminController: Controller
     {
         private readonly IEventCatalogService eventCatalogService;
+        private readonly Settings settings;
+        private readonly IShoppingBasketService basketService;
 
-        public AdminController(IEventCatalogService eventCatalogService, Settings settings)
+        public AdminController(IEventCatalogService eventCatalogService, Settings settings, IShoppingBasketService basketService)
         {
             this.eventCatalogService = eventCatalogService;
+            this.settings = settings;
+            this.basketService = basketService;
         }
 
         public async Task<IActionResult> Index()
@@ -38,6 +43,9 @@ namespace GloboTicket.Web.Controllers
 
             PriceUpdate priceUpdate = new PriceUpdate() { EventId = eventPriceUpdateViewModel.EventId, Price = eventPriceUpdateViewModel.Price };
             await eventCatalogService.UpdatePrice(priceUpdate);
+
+            var basketId = Request.Cookies.GetCurrentBasketId(settings);
+            await basketService.UpdateLinePrices(basketId, priceUpdate);                                 
 
             return RedirectToAction("Index");
         }

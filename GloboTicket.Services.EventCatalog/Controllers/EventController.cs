@@ -49,22 +49,21 @@ namespace GloboTicket.Services.EventCatalog.Controllers
 
             //send integration event on to service bus
 
-            PriceUpdatedMessage priceUpdatedMessage = new PriceUpdatedMessage
-            {
-                EventId = priceUpdate.EventId,
-                Price = priceUpdate.Price
-            };
+            //PriceUpdatedMessage priceUpdatedMessage = new PriceUpdatedMessage
+            //{
+            //    EventId = priceUpdate.EventId,
+            //    Price = priceUpdate.Price
+            //};
 
-            try
-            {
-                //await messageBus.PublishMessage(priceUpdatedMessage, "priceupdatedmessage");
-                await daprClient.PublishEventAsync("pubsub", "priceupdatedmessage", priceUpdatedMessage);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            //try
+            //{                
+            //    await daprClient.PublishEventAsync("pubsub", "priceupdatedmessage", priceUpdatedMessage);
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e);
+            //    throw;
+            //}
 
 
             return Ok(priceUpdate);

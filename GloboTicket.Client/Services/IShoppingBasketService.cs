@@ -11,8 +11,10 @@ namespace GloboTicket.Web.Services
         Task<IEnumerable<BasketLine>> GetLinesForBasket(Guid basketId);
         Task<Basket> GetBasket(Guid basketId);
         Task UpdateLine(Guid basketId, BasketLineForUpdate basketLineForUpdate);
+        Task UpdateLinePrices(Guid basketId, PriceUpdate priceUpdate);
         Task RemoveLine(Guid basketId, Guid lineId);
+        Task ClearBasket(Guid currentBasketId);
         Task ApplyCouponToBasket(Guid basketId, CouponForUpdate couponForUpdate);
-        Task<BasketForCheckout> Checkout(Guid basketId, BasketForCheckout basketForCheckout);
+        Task Checkout(Guid basketId, BasketForCheckout basketForCheckout);
     }
 }

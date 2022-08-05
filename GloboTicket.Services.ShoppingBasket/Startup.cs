@@ -34,7 +34,7 @@ namespace GloboTicket.Services.ShoppingBasket
                         PropertyNameCaseInsensitive = true,
                     }));
 
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());            
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             var optionsBuilder = new DbContextOptionsBuilder<ShoppingBasketDbContext>();
             optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));

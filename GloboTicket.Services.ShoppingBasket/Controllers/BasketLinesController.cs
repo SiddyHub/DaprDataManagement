@@ -12,7 +12,7 @@ using BasketLine = GloboTicket.Services.ShoppingBasket.Models.BasketLine;
 
 namespace GloboTicket.Services.ShoppingBasket.Controllers
 {
-    [Route("api/baskets/{basketId}/basketlines")]
+    [Route("api/baskets/{userId}/basketlines")]
     [ApiController]
     public class BasketLinesController : ControllerBase
     {
@@ -66,28 +66,28 @@ namespace GloboTicket.Services.ShoppingBasket.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BasketLine>> Post(Guid basketId, [FromBody] BasketLineForCreation basketLineForCreation)
+        public async Task<IActionResult> Post(Guid userId, [FromBody] BasketLineForCreation basketLineForCreation)
         {
-            var basket = await basketRepository.GetBasketById(basketId);
+            //var basket = await basketRepository.GetBasketById(basketId);
 
-            if (basket == null)
-            {
-                return NotFound();
-            }
+            //if (basket == null)
+            //{
+            //    return NotFound();
+            //}
 
-            if (!await eventRepository.EventExists(basketLineForCreation.EventId))
-            {
-                var eventFromCatalog = await eventCatalogService.GetEvent(basketLineForCreation.EventId);
-                eventRepository.AddEvent(eventFromCatalog);
-                await eventRepository.SaveChanges();
-            }
+            //if (!await eventRepository.EventExists(basketLineForCreation.EventId))
+            //{
+            //    var eventFromCatalog = await eventCatalogService.GetEvent(basketLineForCreation.EventId);
+            //    eventRepository.AddEvent(eventFromCatalog);
+            //    await eventRepository.SaveChanges();
+            //}
 
-            var basketLineEntity = mapper.Map<Entities.BasketLine>(basketLineForCreation);
+            //var basketLineEntity = mapper.Map<Entities.BasketLine>(basketLineForCreation);
 
-            var processedBasketLine = await basketLinesRepository.AddOrUpdateBasketLine(basketId, basketLineEntity);
-            await basketLinesRepository.SaveChanges();
+            //var processedBasketLine = await basketLinesRepository.AddOrUpdateBasketLine(basketId, basketLineEntity);
+            //await basketLinesRepository.SaveChanges();
 
-            var basketLineToReturn = mapper.Map<BasketLine>(processedBasketLine);
+            //var basketLineToReturn = mapper.Map<BasketLine>(processedBasketLine);
 
             //log also to the event repo
             BasketChangeEvent basketChangeEvent = new BasketChangeEvent
@@ -95,14 +95,15 @@ namespace GloboTicket.Services.ShoppingBasket.Controllers
                 BasketChangeType = BasketChangeTypeEnum.Add,
                 EventId = basketLineForCreation.EventId,
                 InsertedAt = DateTime.Now,
-                UserId = basket.UserId
+                UserId = userId
             };
             await basketChangeEventRepository.AddBasketEvent(basketChangeEvent);
+            return NoContent();
 
-            return CreatedAtRoute(
-                "GetBasketLine",
-                new { basketId = basketLineEntity.BasketId, basketLineId = basketLineEntity.BasketLineId },
-                basketLineToReturn);
+            //return CreatedAtRoute(
+            //    "GetBasketLine",
+            //    new { basketId = basketLineEntity.BasketId, basketLineId = basketLineEntity.BasketLineId },
+            //    basketLineToReturn);
         }
 
         [HttpPut("{basketLineId}")]
@@ -133,38 +134,38 @@ namespace GloboTicket.Services.ShoppingBasket.Controllers
             return Ok(mapper.Map<BasketLine>(basketLineEntity));
         }
 
-        [HttpDelete("{basketLineId}")]
-        public async Task<IActionResult> Delete(Guid basketId, Guid basketLineId)
+        [HttpDelete("{eventId}")]
+        public async Task<IActionResult> Delete(Guid userId, Guid eventId)
         {
             //if (!await basketRepository.BasketExists(basketId))
             //{
             //    return NotFound();
             //}
 
-            var basket = await basketRepository.GetBasketById(basketId);
+            //var basket = await basketRepository.GetBasketById(basketId);
 
-            if (basket == null)
-            {
-                return NotFound();
-            }
+            //if (basket == null)
+            //{
+            //    return NotFound();
+            //}
 
-            var basketLineEntity = await basketLinesRepository.GetBasketLineById(basketLineId);
+            //var basketLineEntity = await basketLinesRepository.GetBasketLineById(basketLineId);
 
-            if (basketLineEntity == null)
-            {
-                return NotFound();
-            }
+            //if (basketLineEntity == null)
+            //{
+            //    return NotFound();
+            //}
 
-            basketLinesRepository.RemoveBasketLine(basketLineEntity);
-            await basketLinesRepository.SaveChanges();
+            //basketLinesRepository.RemoveBasketLine(basketLineEntity);
+            //await basketLinesRepository.SaveChanges();
 
             //publish removal event
             BasketChangeEvent basketChangeEvent = new BasketChangeEvent
             {
                 BasketChangeType = BasketChangeTypeEnum.Remove,
-                EventId = basketLineEntity.EventId,
+                EventId = eventId,
                 InsertedAt = DateTime.Now,
-                UserId = basket.UserId
+                UserId = userId
             };
             await basketChangeEventRepository.AddBasketEvent(basketChangeEvent);
 

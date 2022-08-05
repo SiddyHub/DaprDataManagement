@@ -32,7 +32,7 @@ namespace GloboTicket.Web.Controllers
 
         private async Task<BasketViewModel> CreateBasketViewModel()
         {
-            var basketId = Request.Cookies.GetCurrentBasketId(settings);
+            var basketId = Request.Cookies.GetCurrentBasketId(settings);            
             Basket basket = await basketService.GetBasket(basketId);
 
             var basketLines = await basketService.GetLinesForBasket(basketId);
@@ -127,7 +127,7 @@ namespace GloboTicket.Web.Controllers
                         UserId = settings.UserId
                     };
 
-                    await basketService.Checkout(basketCheckoutViewModel.BasketId, basketForCheckout);
+                    await basketService.Checkout(basketId, basketForCheckout);
 
                     return RedirectToAction("CheckoutComplete");
                 }
