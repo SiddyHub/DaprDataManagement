@@ -55,7 +55,7 @@ namespace GloboTicket.Web.Controllers
 
             Coupon coupon = null;
 
-            if (basket.CouponId.HasValue)
+            if ((basket != null) && (basket.CouponId.HasValue))
                 coupon = await discountService.GetCouponById(basket.CouponId.Value);
 
             if (coupon != null)
