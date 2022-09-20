@@ -49,7 +49,9 @@ The Cosmos DB Endpoint, Key, DatabaseName and Azure Redis Cache Key would be ret
 
 ![callstack](https://user-images.githubusercontent.com/84964657/190982330-5724fbae-2caa-49ec-a87a-db425db661c5.jpg)
 
-   Once the application and side car is running, we can also apply breakpoint to debug the code. Check [this link](https://code.visualstudio.com/docs/editor/debugging#_breakpoints) for more info.
+  Once the application and side car is running, navigate to address **`http://localhost:5000`** in your preferred browser, to access the application.
+
+   We can also apply breakpoint to debug the code. Check [this link](https://code.visualstudio.com/docs/editor/debugging#_breakpoints) for more info.
 
    ![breakpoint](https://user-images.githubusercontent.com/84964657/191080455-2aa1a8f9-a051-410b-9a42-617184b5ee39.jpg)
 
@@ -120,8 +122,8 @@ The Cosmos DB Endpoint, Key, DatabaseName and Azure Redis Cache Key would be ret
 ## Troubleshooting notes
 
 - If not able to load Dapr projects when running from VS Code, check if Docker Engine is running, so that it can load all components.
-- If using Azure Service Bus as a Pub Sub Message broker make sure to enter primary connection string in `secrets.json`
-- If using Cosmos DB make sure to enter Endpoint, Key and DatabaseName in `secrets.json` file
-- If using Azure Redis Cache make sure to enter Key in `secrets.json` file
+- If using Azure Service Bus as a Pub Sub Message broker make sure to enter primary connection string value for **"servicebus"** key in `secrets.json`
+- If using Cosmos DB make sure to enter Endpoint and Key in `secrets.json` file **"CosmosDb"** section.
+- If using Azure Redis Cache make sure to enter Key in `secrets.json` file **"redis"** section.
 - If mail binding is not working, make sure `maildev`image is running. Refer [this link](https://github.com/maildev/maildev) for more info.
 - For any more service issues, we can check Zipkin trace logs.
