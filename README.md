@@ -22,7 +22,7 @@ This version of the code uses **Dapr 1.7**
 
 ## Architecture Overview
 
-![dapr_state_mgmnt_arch](https://user-images.githubusercontent.com/84964657/191172558-eaa48644-12e2-4b95-9ff3-960776a63809.png)
+![dapr_state_mgmnt_arch](https://user-images.githubusercontent.com/84964657/191175832-7ce251c3-af91-4ef0-baeb-6006ddab2e31.png)
 
 In our [Part 1](https://github.com/SiddyHub/Dapr/tree/eshop_daprized) we used  ShoppingBasket as one of our API service endpoint, to add items, remove or update our line items in the shopping basket.
 Also our EventCatalog service used to get Events and Categories from a relational SQL Database.
@@ -84,6 +84,7 @@ The Cosmos DB Endpoint, Key, DatabaseName and Azure Redis Cache Key would be ret
      The secrets configuration provider is available from the [Dapr.Extensions.Configuration](https://www.nuget.org/packages/Dapr.Extensions.Configuration) NuGet package. The provider can be registered in the `Program.cs` of an ASP.NET Web API application.
 
      We use the secrets configuration provider to load our Cosmos DB Endpoint, Key and DatabaseName from `secrets.json` file, like below:
+
      ```
      .ConfigureAppConfiguration(config => 
      {
@@ -97,7 +98,9 @@ The Cosmos DB Endpoint, Key, DatabaseName and Azure Redis Cache Key would be ret
        config.AddDaprSecretStore("secretstore", secretDescriptors, daprClient);
     })
      ```
+
      Now secrets are loaded into the application configuration. You can retrieve them by calling the indexer of the IConfiguration instance in `Startup.cs ConfigureServices`
+
      ```
      services.AddDbContext<EventCatalogCosmosDbContext>(options =>
                 options.UseCosmos(Configuration["CosmosDb:Endpoint"],
