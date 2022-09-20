@@ -77,6 +77,7 @@ The Cosmos DB Endpoint, Key, DatabaseName and Azure Redis Cache Key would be ret
    |-----------|-----------------------------------|
    |![initial_cache](https://user-images.githubusercontent.com/84964657/191172204-d28d2616-8a55-4d8d-87ac-e700ac86a38b.jpg)|  ![cache_values](https://user-images.githubusercontent.com/84964657/191172284-c7d755d1-ca03-4616-9910-6c9278509528.jpg)|
 
+
 **2. Secrets Management**
 
      Refer [this link](https://docs.dapr.io/developing-applications/building-blocks/secrets/secrets-overview/) to know about more about dapr Secrets Management.
@@ -110,10 +111,10 @@ The Cosmos DB Endpoint, Key, DatabaseName and Azure Redis Cache Key would be ret
 
      ```
      services.AddDbContext<EventCatalogCosmosDbContext>(options =>
-                options.UseCosmos(Configuration["CosmosDb:Endpoint"],
-                Configuration["CosmosDb:Key"],
-                Configuration["CosmosDb:DatabaseName"])
-            );
+        options.UseCosmos(Configuration["CosmosDb:Endpoint"],
+        Configuration["CosmosDb:Key"],
+        Configuration["CosmosDb:DatabaseName"])
+     );
      ```
 
 ## Troubleshooting notes
