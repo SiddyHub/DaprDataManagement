@@ -80,42 +80,42 @@ The Cosmos DB Endpoint, Key, DatabaseName and Azure Redis Cache Key would be ret
 
 **2. Secrets Management**
 
-     Refer [this link](https://docs.dapr.io/developing-applications/building-blocks/secrets/secrets-overview/) to know about more about dapr Secrets Management.
-
-     The Dapr .Net SDK features a .Net Configuration Provider. It loads specified secrets into underlying [.Net Configuration API](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration).
+   Refer [this link](https://docs.dapr.io/developing-applications/building-blocks/secrets/secrets-overview/) to know about more about dapr Secrets Management.
+   
+        The Dapr .Net SDK features a .Net Configuration Provider. It loads specified secrets into underlying [.Net Configuration API](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration).
      
-     Our application can then reference secrets from the IConfiguration dictionary that is registered in ASP.NET Core dependency injection.
+   Our application can then reference secrets from the IConfiguration dictionary that is registered in ASP.NET Core dependency injection.
      
-     The secrets configuration provider is available from the [Dapr.Extensions.Configuration](https://www.nuget.org/packages/Dapr.Extensions.Configuration) Nuget
-     package.
-     The provider can be registered in the `Program.cs` of an ASP.NET Web API application.
+   The secrets configuration provider is available from the [Dapr.Extensions.Configuration](https://www.nuget.org/packages/Dapr.Extensions.Configuration) Nuget
+   package.
+   The provider can be registered in the `Program.cs` of an ASP.NET Web API application.
 
-     We use the secrets configuration provider to load our Cosmos DB Endpoint, Key and DatabaseName from `secrets.json` file, like below:
+   We use the secrets configuration provider to load our Cosmos DB Endpoint, Key and DatabaseName from `secrets.json` file, like below:
 
-     ```
-     .ConfigureAppConfiguration(config => 
-     {
-        var daprClient = new DaprClientBuilder().Build();                  
-        var secretDescriptors = new List<DaprSecretDescriptor>
-        {
-            new DaprSecretDescriptor("CosmosDb:Endpoint"),
-            new DaprSecretDescriptor("CosmosDb:Key"),
-            new DaprSecretDescriptor("CosmosDb:DatabaseName")
-       };
-       config.AddDaprSecretStore("secretstore", secretDescriptors, daprClient);
-    })
-     ```
+   ```
+   .ConfigureAppConfiguration(config => 
+   {
+      var daprClient = new DaprClientBuilder().Build();                  
+      var secretDescriptors = new List<DaprSecretDescriptor>
+      {
+          new DaprSecretDescriptor("CosmosDb:Endpoint"),
+          new DaprSecretDescriptor("CosmosDb:Key"),
+          new DaprSecretDescriptor("CosmosDb:DatabaseName")
+     };
+     config.AddDaprSecretStore("secretstore", secretDescriptors, daprClient);
+   })
+   ```
 
-     Now secrets are loaded into the application configuration. You can retrieve them by calling the indexer of the IConfiguration instance in
-     `Startup.cs ConfigureServices`
+   Now secrets are loaded into the application configuration. You can retrieve them by calling the indexer of the IConfiguration instance in
+   `Startup.cs ConfigureServices`
 
-     ```
-     services.AddDbContext<EventCatalogCosmosDbContext>(options =>
-        options.UseCosmos(Configuration["CosmosDb:Endpoint"],
-        Configuration["CosmosDb:Key"],
-        Configuration["CosmosDb:DatabaseName"])
-     );
-     ```
+   ```
+   services.AddDbContext<EventCatalogCosmosDbContext>(options =>
+      options.UseCosmos(Configuration["CosmosDb:Endpoint"],
+      Configuration["CosmosDb:Key"],
+      Configuration["CosmosDb:DatabaseName"])
+   );
+   ```
 
 ## Troubleshooting notes
 
