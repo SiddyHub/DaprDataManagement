@@ -79,9 +79,13 @@ The Cosmos DB Endpoint, Key, DatabaseName and Azure Redis Cache Key would be ret
 
 **2. Secrets Management**
 
-     The Dapr .NET SDK also features a .NET configuration provider. It loads specified secrets into the underlying [.NET configuration API](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration). Our application can then reference secrets from the IConfiguration dictionary that is registered in ASP.NET Core dependency injection.
-
-     The secrets configuration provider is available from the [Dapr.Extensions.Configuration](https://www.nuget.org/packages/Dapr.Extensions.Configuration) NuGet package. The provider can be registered in the `Program.cs` of an ASP.NET Web API application.
+     The Dapr .Net SDK features a .Net Configuration Provider. It loads specified secrets into underlying [.Net Configuration API](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration).
+     
+     Our application can then reference secrets from the IConfiguration dictionary that is registered in ASP.NET Core dependency injection.
+     
+     The secrets configuration provider is available from the [Dapr.Extensions.Configuration](https://www.nuget.org/packages/Dapr.Extensions.Configuration) Nuget
+     package.
+     The provider can be registered in the `Program.cs` of an ASP.NET Web API application.
 
      We use the secrets configuration provider to load our Cosmos DB Endpoint, Key and DatabaseName from `secrets.json` file, like below:
 
