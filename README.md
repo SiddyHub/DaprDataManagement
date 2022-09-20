@@ -1,4 +1,4 @@
-# DaprDataManagement
+# Dapr Data Management
 
   Welcome to the Part 2 of the [Dapr Series](https://github.com/SiddyHub/Dapr/tree/eshop_daprized).
   
@@ -22,6 +22,8 @@ This version of the code uses **Dapr 1.7**
 
 ## Architecture Overview
 
+![dapr_state_mgmnt_arch](https://user-images.githubusercontent.com/84964657/191172558-eaa48644-12e2-4b95-9ff3-960776a63809.png)
+
 In our [Part 1](https://github.com/SiddyHub/Dapr/tree/eshop_daprized) we used  ShoppingBasket as one of our API service endpoint, to add items, remove or update our line items in the shopping basket.
 Also our EventCatalog service used to get Events and Categories from a relational SQL Database.
 
@@ -41,7 +43,11 @@ The Cosmos DB Endpoint, Key, DatabaseName and Azure Redis Cache Key would be ret
 
    In VS Code go to Run and Debug, and Run All Projects at the same time or Individual project.
 
-![callstack](https://user-images.githubusercontent.com/84964657/190982330-5724fbae-2caa-49ec-a87a-db425db661c5.jpg)    ![debug](https://user-images.githubusercontent.com/84964657/190982955-b0a69850-4795-444a-aaf3-e2d6120dc1b2.jpg)
+ ![debug](https://user-images.githubusercontent.com/84964657/190982955-b0a69850-4795-444a-aaf3-e2d6120dc1b2.jpg)
+ 
+  All the projects which have build successfully and running, can be viewed in the Call Stack window.
+
+![callstack](https://user-images.githubusercontent.com/84964657/190982330-5724fbae-2caa-49ec-a87a-db425db661c5.jpg)
 
    Once the application and side car is running, we can also apply breakpoint to debug the code. Check [this link](https://code.visualstudio.com/docs/editor/debugging#_breakpoints) for more info.
 
@@ -52,6 +58,7 @@ The Cosmos DB Endpoint, Key, DatabaseName and Azure Redis Cache Key would be ret
    ![dapr_extension_components](https://user-images.githubusercontent.com/84964657/190985678-5b7d24c8-095d-43e5-86fe-0002a5d985ee.png)
 
 ## Dapr Building Blocks Covered
+
 **1. State Management**
    
    *We would be using Azure Redis Cache for our State Management, but if Azure Subscription is not available, one can use Redis Cache container spun up by Dapr.
@@ -68,7 +75,7 @@ The Cosmos DB Endpoint, Key, DatabaseName and Azure Redis Cache Key would be ret
 
    |Initial Run|After Item added to Shopping Basket|
    |-----------|-----------------------------------|
-   |           |                                   |
+   |![initial_cache](https://user-images.githubusercontent.com/84964657/191172204-d28d2616-8a55-4d8d-87ac-e700ac86a38b.jpg)|  ![cache_values](https://user-images.githubusercontent.com/84964657/191172284-c7d755d1-ca03-4616-9910-6c9278509528.jpg)|
 
 **2. Secrets Management**
 
